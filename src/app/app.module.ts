@@ -14,28 +14,9 @@ import { ServersService } from './servers/servers.service';
 import { Route, RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RedirectComponentComponent } from './redirect-component/redirect-component.component'
-
-// children for routing . make changes in parent template with router-outlet so that children can be injected.
-
-const routes: Route[] = [
-  
-  {path:'redirectTo',component:RedirectComponentComponent},
-  {path:'somepath',redirectTo:'redirectTo'},
-  { path: '', component: HomeComponent },
-  {
-    path: 'servers', component: ServersComponent, children: [
-      { path: ':id', component: ServerComponent },
-      { path: ':id/edit', component: EditServerComponent }
-    ]
-  },
-  { path: 'users', component: UsersComponent,children:[
-    { path: ':id/:name', component: UserComponent }
-  ] },
-  // this should be last one else it will execute before all and no component can be deliver to ui
-  {path:'**',component:PageNotFoundComponent}
+import { AppRoutingModule } from './app-routing/app-routing.module';
 
 
-]
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +32,7 @@ const routes: Route[] = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    AppRoutingModule
   ],
   providers: [ServersService],
   bootstrap: [AppComponent]
