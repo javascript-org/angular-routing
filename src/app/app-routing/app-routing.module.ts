@@ -9,31 +9,40 @@ import { EditServerComponent } from '../servers/edit-server/edit-server.componen
 import { UsersComponent } from '../users/users.component';
 import { UserComponent } from '../users/user/user.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
+import { AuthGuard } from '../auth/auth.guard';
 
 
 // children for routing . make changes in parent template with router-outlet so that children can be injected.
 const routes: Route[] = [
-  
-  {path:'redirectTo',component:RedirectComponentComponent},
-  {path:'somepath',redirectTo:'redirectTo'},
+
+  { path: 'redirectTo', component: RedirectComponentComponent },
+  { path: 'somepath', redirectTo: 'redirectTo' },
   { path: '', component: HomeComponent },
   {
-    path: 'servers', component: ServersComponent, children: [
+    path: 'servers', 
+    component: ServersComponent, 
+    //canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard] ,
+    children: [
       { path: ':id', component: ServerComponent },
       { path: ':id/edit', component: EditServerComponent }
     ]
   },
-  { path: 'users', component: UsersComponent,children:[
-    { path: ':id/:name', component: UserComponent }
-  ] },
+  {
+    path: 'users', component: UsersComponent, children: [
+      { path: ':id/:name', component: UserComponent }
+    ]
+  },
   // this should be last one else it will execute before all and no component can be deliver to ui
-  {path:'**',component:PageNotFoundComponent}
+  { path: '**', component: PageNotFoundComponent }
 
 
 ]
 
 @NgModule({
-  //  register AppRoutingModule in app module. So you need to export this module from here.
+  //  register AppRoutingModule in app module.
+  // And you need to export RouterModule from the current module so that the
+  // app.module can access the RouterModule module from here.
   exports: [RouterModule],
   imports: [
     CommonModule,
